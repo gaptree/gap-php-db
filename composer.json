@@ -1,7 +1,7 @@
 {
-    "name": "gap/lib",
+    "name": "gap/db",
     "type": "library",
-    "description": "Gap Lib",
+    "description": "Gap Database",
     "keywords": [
         "gap"
     ],
