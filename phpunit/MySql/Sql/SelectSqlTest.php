@@ -58,7 +58,9 @@ class SelectSqlTest extends TestCase
             ->expect('b.col1')->greater(3)
             ->orExpect('b.col1')->less(6)
             ->end()
-            ->orExpect('a.col3')->lessEqual(100);
+            ->orExpect('a.col3')->lessEqual(100)
+            ->andExpect('a.col4')->like('%test%')
+            ->orExpect('a.col5')->inInt(1, 2, 3, 4, 5);
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2, b.col3'
@@ -68,6 +70,8 @@ class SelectSqlTest extends TestCase
             . ' AND (b.col1 > :k3'
             . ' OR b.col1 < :k4)'
             . ' OR a.col3 <= :k5'
+            . ' AND a.col4 LIKE :k6'
+            . ' OR a.col5 IN (:k7, :k8, :k9, :k10, :k11)'
             . ' LIMIT 10 OFFSET 0',
             $select->sql()
         );
