@@ -6,10 +6,16 @@ class Where extends Base
     protected $partArr = [];
     protected $pre = '';
     protected $isPacked = false;
+    protected $parent = null;
 
     public function setPre(string $pre): void
     {
         $this->pre = $pre;
+    }
+
+    public function setParent(Where $parent): void
+    {
+        $this->parent = $parent;
     }
 
     public function pack(): void
@@ -44,9 +50,15 @@ class Where extends Base
         $group = new Where($this->selectSql);
         $group->setPre($pre);
         $group->pack();
+        $group->setParent($this);
 
         $this->partArr[] = $group;
         return $group;
+    }
+
+    public function end(): Where
+    {
+        return $this->parent;
     }
 
     public function andGroup(): Where
@@ -61,7 +73,7 @@ class Where extends Base
 
     public function partSql(): string
     {
-        return implode(
+        $sql = implode(
             ' ',
             array_map(
                 function ($item) {
@@ -70,5 +82,11 @@ class Where extends Base
                 $this->partArr
             )
         );
+
+        if ($this->isPacked) {
+            return $this->pre . ' (' . $sql . ')';
+        }
+
+        return $sql;
     }
 }
