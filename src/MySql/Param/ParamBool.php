@@ -1,7 +1,7 @@
 <?php
-namespace Gap\Db\MySql\Sql\Util;
+namespace Gap\Db\MySql\Param;
 
-class ParamBool extends Param
+class ParamBool extends ParamBase
 {
     protected $val;
 

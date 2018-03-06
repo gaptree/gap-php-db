@@ -1,9 +1,7 @@
 <?php
-namespace Gap\Db\MySql\Sql\Util;
+namespace Gap\Db\MySql\Param;
 
-// http://php.net/manual/en/pdo.constants.php
-
-abstract class Param
+abstract class ParamBase
 {
     protected static $index = 1;
 

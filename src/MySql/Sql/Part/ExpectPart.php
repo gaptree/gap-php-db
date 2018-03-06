@@ -1,10 +1,11 @@
 <?php
-namespace Gap\Db\MySql\Sql\Util;
+namespace Gap\Db\MySql\Sql\Part;
 
-class CondBase
+use Gap\Db\MySql\Param\ParamBase;
+
+class ExpectPart extends PartBase
 {
     protected $pre = '';
-
     protected $field;
     protected $operate;
     protected $res;
@@ -24,32 +25,26 @@ class CondBase
         return $sql;
     }
 
-    public function beStr(string $val): void
+    public function expr(string $operate, string $expr): void
     {
-        $this->cond('=', new ParamStr($val));
+        $this->operate = $operate;
+        $this->res = $expr;
+        $this->paramArr = [];
     }
 
-    public function beInt(int $val): void
-    {
-        $this->cond('=', new ParamInt($val));
-    }
-
-    public function like(string $val): void
-    {
-        $this->cond('LIKE', new ParamStr($val));
-    }
-
-    protected function cond(string $operate, Param $param): void
+    public function cond(string $operate, ParamBase $param): void
     {
         $this->operate = $operate;
         $this->res = $param->key();
         $this->paramArr = [$param];
     }
 
-    protected function inCond(array $keyArr, array $paramArr): void
+    /*
+    public function inCond(array $keyArr, array $paramArr): void
     {
         $this->operate = 'IN';
         $this->res = '(' . implode(', ', $keyArr) . ')';
         $this->paramArr = $paramArr;
     }
+    */
 }

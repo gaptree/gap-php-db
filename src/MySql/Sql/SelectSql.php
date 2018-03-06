@@ -1,72 +1,24 @@
 <?php
 namespace Gap\Db\MySql\Sql;
 
-class SelectSql extends SqlBase
+class SelectSql extends ManipulateSql
 {
-    protected $select;
-    protected $from;
-    protected $where;
-    protected $offset = 0;
-    protected $limit = 10;
+    protected $selectArr;
 
-    public function limit(int $limit): void
+    public function select(string ...$selectArr): void
     {
-        $this->limit = $limit;
-    }
-
-    public function offset(int $offset): void
-    {
-        $this->offset = $offset;
-    }
-
-    public function getSelect(): Select\Select
-    {
-        if ($this->select) {
-            return $this->select;
-        }
-
-        $this->select = new Select\Select($this);
-        return $this->select;
-    }
-
-    public function getFrom(): Select\From
-    {
-        if ($this->from) {
-            return $this->from;
-        }
-
-        $this->from = new Select\From($this);
-        return $this->from;
+        $this->selectArr = $selectArr;
     }
 
     public function sql(): string
     {
-        return 'SELECT ' . $this->select->partSql()
-            . ' FROM ' . $this->from->partSql()
-            . ($this->where ? ' WHERE ' . $this->where->partSql() : '')
-            . ' LIMIT ' . $this->limit
-            . ' OFFSET ' . $this->offset;
-    }
+        $sql = 'SELECT ' . implode(', ', $this->selectArr)
+            . ' FROM ' . $this->tablePart;
 
-    public function getWhere(): Select\Where
-    {
-        if ($this->where) {
-            return $this->where;
+        if ($this->wherePart) {
+            $sql .= ' WHERE ' . $this->wherePart;
         }
 
-        $this->where = new Select\Where($this);
-        return $this->where;
+        return $sql;
     }
-
-    /*
-    public function getJoin(): Select\Join
-    {
-        if ($this->join) {
-            return $this->join;
-        }
-
-        $this->join = new Select\Join();
-        return $thi->join;
-    }
-    */
 }
