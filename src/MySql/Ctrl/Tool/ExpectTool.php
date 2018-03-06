@@ -2,8 +2,6 @@
 namespace Gap\Db\MySql\Ctrl\Tool;
 
 use Gap\Db\MySql\Sql\Part\ExpectPart;
-use Gap\Db\MySql\Param\ParamStr;
-use Gap\Db\MySql\Param\ParamInt;
 
 class ExpectTool extends ToolBase
 {
@@ -26,10 +24,27 @@ class ExpectTool extends ToolBase
         return $this->whereTool;
     }
 
+    public function beStr(string $val): WhereTool
+    {
+        $this->expectPart->cond('=', $this->paramStr($val));
+        return $this->whereTool;
+    }
+
+    public function beInt(int $val): WhereTool
+    {
+        $this->expectPart->cond('=', $this->paramInt($val));
+        return $this->whereTool;
+    }
+
+    public function beDateTime(\DateTime $dateTime): WhereTool
+    {
+        $this->expectPart->cond('=', $this->paramDateTime($dateTime));
+        return $this->whereTool;
+    }
+
     public function greater($val): WhereTool
     {
-        $param = is_int($val) ? new ParamInt($val) : new ParamStr($val);
-        $this->expectPart->cond('>', $param);
+        $this->expectPart->cond('>', $this->paramNumber($val));
         return $this->whereTool;
     }
 }

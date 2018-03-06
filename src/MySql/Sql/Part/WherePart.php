@@ -6,15 +6,28 @@ class WherePart extends PartBase
     protected $partArr = [];
     protected $pre = '';
     protected $isPacked = false;
-    protected $parent = null;
+
+    public function __construct(string $pre = '')
+    {
+        $this->pre = $pre; // '', 'AND', 'OR'
+    }
+
+    public function pack(): self
+    {
+        $this->isPacked = true;
+        return $this;
+    }
 
     public function partSql(): string
     {
-        if ($this->partArr) {
-            return implode(' ', $this->partArr);
+        $pre = $this->pre ? $this->pre . ' ' : '';
+        $partSql = implode(' ', $this->partArr);
+
+        if ($this->isPacked) {
+            return $pre . '(' . $partSql . ')';
         }
 
-        return '';
+        return $pre . $partSql;
     }
 
     public function getExpectPart(string $field, string $pre = ''): ExpectPart
@@ -22,5 +35,12 @@ class WherePart extends PartBase
         $expectPart = new ExpectPart($field, $pre);
         $this->partArr[] = $expectPart;
         return $expectPart;
+    }
+
+    public function getGroupPart(string $pre = ''): WherePart
+    {
+        $groupPart = new WherePart($pre);
+        $this->partArr[] = $groupPart;
+        return $groupPart;
     }
 }

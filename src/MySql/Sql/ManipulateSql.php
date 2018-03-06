@@ -5,18 +5,16 @@
 
 namespace Gap\Db\MySql\Sql;
 
-abstract class ManipulateSql
+abstract class ManipulateSql extends SqlBase
 {
     protected $tablePart;
     protected $wherePart;
 
-    protected $groupByPart;
-    protected $orderByPart;
+    protected $groupByArr = [];
+    protected $orderByArr = [];
 
-    protected $limit;
-    protected $offset;
-
-    abstract public function sql(): string;
+    protected $limit = 10;
+    protected $offset = 0;
 
     public function limit(int $limit): void
     {
@@ -47,6 +45,39 @@ abstract class ManipulateSql
         return $this->wherePart;
     }
 
+    public function groupBy(string $field, $sort = ''): void
+    {
+        $sort = $sort ? ' ' . $sort : '';
+        $this->groupByArr[] = $field . $sort;
+    }
+
+    public function ascGroupBy(string $field): void
+    {
+        $this->groupBy($field, 'ASC');
+    }
+
+    public function descGroupBy(string $field): void
+    {
+        $this->groupBy($field, 'DESC');
+    }
+
+    public function orderBy(string $field, $sort = ''): void
+    {
+        $sort = $sort ? ' ' . $sort : '';
+        $this->orderByArr[] = $field . $sort;
+    }
+
+    public function ascOrderBy(string $field): void
+    {
+        $this->orderBy($field, 'ASC');
+    }
+
+    public function descOrderBy(string $field): void
+    {
+        $this->orderBy($field, 'DESC');
+    }
+
+    /*
     public function getOrderByPart(): Part\OrderByPart
     {
         if ($this->orderByPart) {
@@ -65,4 +96,5 @@ abstract class ManipulateSql
         $this->groupByPart = new Part\GroupByPart();
         return $this->groupByPart;
     }
+    */
 }
