@@ -5,6 +5,9 @@
 
 namespace Gap\Db\MySql\Sql;
 
+use Gap\Db\MySql\Statement;
+use Gap\Db\MySql\RowCollection;
+
 abstract class ManipulateSql extends SqlBase
 {
     protected $tablePart;
@@ -51,6 +54,45 @@ abstract class ManipulateSql extends SqlBase
         $this->groupByArr[] = $field . $sort;
     }
 
+    public function orderBy(string $field, $sort = ''): void
+    {
+        $sort = $sort ? ' ' . $sort : '';
+        $this->orderByArr[] = $field . $sort;
+    }
+
+    public function fetchAssoc(): array
+    {
+        $this->limit(1);
+        return $this->prepare()->fetchAssoc();
+    }
+
+    public function fetch(string $class)
+    {
+        $this->limit(1);
+        return $this->prepare()->fetch($class);
+    }
+
+    public function list(string $class): RowCollection
+    {
+        return new RowCollection(
+            $this->prepare(),
+            $class
+        );
+    }
+
+    public function listAssoc(): array
+    {
+        return $this->prepare()->listAssoc();
+    }
+
+    protected function prepare(): Statement
+    {
+        $stmt = $this->cnn->prepare($this->sql());
+        $stmt->bindParam(...$this->paramArr);
+        return $stmt;
+    }
+
+    /*
     public function ascGroupBy(string $field): void
     {
         $this->groupBy($field, 'ASC');
@@ -59,12 +101,6 @@ abstract class ManipulateSql extends SqlBase
     public function descGroupBy(string $field): void
     {
         $this->groupBy($field, 'DESC');
-    }
-
-    public function orderBy(string $field, $sort = ''): void
-    {
-        $sort = $sort ? ' ' . $sort : '';
-        $this->orderByArr[] = $field . $sort;
     }
 
     public function ascOrderBy(string $field): void
@@ -77,7 +113,6 @@ abstract class ManipulateSql extends SqlBase
         $this->orderBy($field, 'DESC');
     }
 
-    /*
     public function getOrderByPart(): Part\OrderByPart
     {
         if ($this->orderByPart) {

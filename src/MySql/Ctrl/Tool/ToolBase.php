@@ -2,10 +2,13 @@
 namespace Gap\Db\MySql\Ctrl\Tool;
 
 use Gap\Db\MySql\Sql\ManipulateSql;
+use Gap\Db\MySql\RowCollection;
 
 abstract class ToolBase
 {
     use Support\ToolParamTrait;
+    use Support\ToolGroupByTrait;
+    use Support\ToolOrderByTrait;
 
     protected $manipulateSql;
 
@@ -31,39 +34,23 @@ abstract class ToolBase
         return $this;
     }
 
-    public function groupBy(string $field, string $sort = ''): self
+    public function fetch(string $class)
     {
-        $this->manipulateSql->groupBy($field, $sort);
-        return $this;
+        return $this->manipulateSql->fetch($class);
     }
 
-    public function ascGroupBy(string $field): self
+    public function list(string $class): RowCollection
     {
-        $this->manipulateSql->ascGroupBy($field);
-        return $this;
+        return $this->manipulateSql->list($class);
     }
 
-    public function descGroupBy(string $field): self
+    public function fetchAssoc(): array
     {
-        $this->manipulateSql->descGroupBy($field);
-        return $this;
+        return $this->manipulateSql->fetchAssoc();
     }
 
-    public function orderBy(string $field, string $sort = ''): self
+    public function listAssoc(): array
     {
-        $this->manipulateSql->orderBy($field, $sort);
-        return $this;
-    }
-
-    public function ascOrderBy(string $field): self
-    {
-        $this->manipulateSql->ascOrderBy($field);
-        return $this;
-    }
-
-    public function descOrderBy(string $field): self
-    {
-        $this->manipulateSql->descOrderBy($field);
-        return $this;
+        return $this->manipulateSql->listAssoc();
     }
 }

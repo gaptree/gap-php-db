@@ -1,6 +1,7 @@
 <?php
 namespace Gap\Db\MySql\Sql;
 
+use Gap\Db\MySql\Cnn;
 use Gap\Db\MySql\Param\ParamStr;
 use Gap\Db\MySql\Param\ParamInt;
 use Gap\Db\MySql\Param\ParamBool;
@@ -8,8 +9,12 @@ use Gap\Db\MySql\Param\ParamBool;
 abstract class SqlBase
 {
     protected $paramArr = [];
+    protected $cnn;
 
-    abstract public function sql(): string;
+    public function __construct(Cnn $cnn)
+    {
+        $this->cnn = $cnn;
+    }
 
     public function paramStr(string $val): ParamStr
     {
@@ -31,4 +36,6 @@ abstract class SqlBase
         $this->paramArr[] = $param;
         return $param;
     }
+
+    abstract public function sql(): string;
 }

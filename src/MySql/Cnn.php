@@ -1,7 +1,9 @@
 <?php
 namespace Gap\Db\MySql;
 
-class Cnn
+use Gap\Db\CnnInterface;
+
+class Cnn implements CnnInterface
 {
     protected $pdo;
     protected $serverId;
@@ -64,5 +66,31 @@ class Cnn
     public function zcode(): string
     {
         return uniqid($this->serverId);
+    }
+
+    public function prepare(string $sql): Statement
+    {
+        return new Statement($this->pdo->prepare($sql));
+    }
+
+    public function select(string ...$selectArr): Ctrl\SelectCtrl
+    {
+        $selectCtrl = (new Ctrl\SelectCtrl(
+            new Sql\SelectSql($this)
+        ));
+        $selectCtrl->select(...$selectArr);
+        return $selectCtrl;
+    }
+
+    public function update(string ...$tableArr): Ctrl\UpdateCtrl
+    {
+    }
+
+    public function delete(string ...$deleteArr): Ctrl\DeleteCtrl
+    {
+    }
+
+    public function insert(string $into): Ctrl\InsertCtrl
+    {
     }
 }

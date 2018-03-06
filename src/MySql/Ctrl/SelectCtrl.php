@@ -3,7 +3,7 @@ namespace Gap\Db\MySql\Ctrl;
 
 use Gap\Db\MySql\Sql\SelectSql;
 
-class SelectCtrl
+class SelectCtrl extends CtrlBase
 {
     protected $selectSql;
 

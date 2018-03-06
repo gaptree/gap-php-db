@@ -2,13 +2,22 @@
 namespace phpunit\Gap\Db\MySql\Ctrl;
 
 use PHPUnit\Framework\TestCase;
-use Gap\Db\MySql\SqlBuilder;
+use Gap\Db\MySql\Cnn;
 
 class SelectCtrlTest extends TestCase
 {
+    protected $cnn;
+
+    protected function setUp(): void
+    {
+        $pdo = $this->createMock('PDO');
+        $serverId = 'xdfsa';
+        $this->cnn = new Cnn($pdo, $serverId);
+    }
+
     public function testFrom(): void
     {
-        $sqlCtrl = (new SqlBuilder())->select('a.*', 'b.col1', 'b.col2')
+        $sqlCtrl = $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b');
 
         $this->assertEquals(
@@ -21,7 +30,7 @@ class SelectCtrlTest extends TestCase
 
     public function testJoin(): void
     {
-        $sqlCtrl = (new SqlBuilder())->select('a.*', 'b.col1', 'b.col2')
+        $sqlCtrl = $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b')
             ->leftJoin('tableC c', 'tableD d')
             ->onCond()
@@ -50,6 +59,85 @@ class SelectCtrlTest extends TestCase
             . ' ORDER BY a.col2 DESC'
             . ' LIMIT 28 OFFSET 3',
             $sqlCtrl->sql()
+        );
+    }
+
+    public function testFetch(): void
+    {
+        $pdo = $this->createMock('PDO');
+        $stmt = $this->createMock('PDOStatement');
+        $stmt->method('execute')->will($this->returnValue(true));
+        $stmt->method('fetch')->will($this->returnValue([
+            'name' => 'apple', 'color'=> 'green',
+        ]));
+        $pdo->method('prepare')->will($this->returnValue($stmt));
+
+        $serverId = 'xdfsa';
+        $cnn = new Cnn($pdo, $serverId);
+
+        $fruit = $cnn->select('*')
+            ->from('fruit')
+            ->fetch(FruitDto::class);
+
+        $this->assertEquals(
+            new FruitDto([
+                'name' => 'apple', 'color'=> 'green',
+            ]),
+            $fruit
+        );
+    }
+
+    public function testListAssoc(): void
+    {
+        $pdo = $this->createMock('PDO');
+        $stmt = $this->createMock('PDOStatement');
+        $stmt->method('execute')->will($this->returnValue(true));
+        $stmt->method('fetchAll')->will($this->returnValue([
+            ['name' => 'apple', 'color'=> 'green'],
+            ['name' => 'pear', 'color' => 'yellow']
+        ]));
+        $pdo->method('prepare')->will($this->returnValue($stmt));
+
+        $serverId = 'xdfsa';
+        $cnn = new Cnn($pdo, $serverId);
+
+        $fruits = $cnn->select('*')
+            ->from('tableA')
+            ->listAssoc();
+
+        $this->assertEquals(
+            [
+                ['name' => 'apple', 'color'=> 'green'],
+                ['name' => 'pear', 'color' => 'yellow']
+            ],
+            $fruits
+        );
+    }
+
+    public function testList(): void
+    {
+        $pdo = $this->createMock('PDO');
+        $stmt = $this->createMock('PDOStatement');
+        $stmt->method('execute')->will($this->returnValue(true));
+        $stmt->method('fetch')->will($this->returnValue([
+            'name' => 'apple', 'color'=> 'green',
+        ]));
+        $pdo->method('prepare')->will($this->returnValue($stmt));
+
+        $serverId = 'xdfsa';
+        $cnn = new Cnn($pdo, $serverId);
+
+        $fruits = $cnn->select('*')
+            ->from('tableA')
+            ->list(FruitDto::class);
+
+        $fruits->rewind();
+
+        $this->assertEquals(
+            new FruitDto([
+                'name' => 'apple', 'color'=> 'green',
+            ]),
+            $fruits->current()
         );
     }
 }
