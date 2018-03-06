@@ -13,7 +13,8 @@ class SelectCtrlTest extends TestCase
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2'
-            . ' FROM tableA a, tableB b',
+            . ' FROM tableA a, tableB b'
+            . ' LIMIT 10 OFFSET 0',
             $sqlCtrl->sql()
         );
     }
