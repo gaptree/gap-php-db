@@ -8,6 +8,11 @@ abstract class ParamBase
     protected $type;
     protected $key;
 
+    public static function initIndex(): void
+    {
+        self::$index = 1;
+    }
+
     public function __construct()
     {
         $this->key = ':k' . strval(self::$index++);

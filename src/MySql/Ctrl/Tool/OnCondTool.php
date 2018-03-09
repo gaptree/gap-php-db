@@ -9,4 +9,11 @@ class OnCondTool extends WhereTool
         $whereTool->setWherePart($this->manipulateSql->getWherePart());
         return $whereTool;
     }
+    
+    public function set(string $field): SetTool
+    {
+        $setTool = new SetTool($this->manipulateSql);
+        $setTool->setSetPart($this->manipulateSql->getSetPart($field));
+        return $setTool;
+    }
 }

@@ -14,6 +14,7 @@ abstract class ManipulateSql extends SqlBase
 
     protected $groupByArr = [];
     protected $orderByArr = [];
+    protected $setPartArr = [];
 
     protected $limit = 10;
     protected $offset = 0;
@@ -45,6 +46,13 @@ abstract class ManipulateSql extends SqlBase
 
         $this->wherePart = new Part\WherePart();
         return $this->wherePart;
+    }
+
+    public function getSetPart(string $field): Part\SetPart
+    {
+        $setPart = new Part\SetPart($field);
+        $this->setPartArr[] = $setPart;
+        return $setPart;
     }
 
     public function groupBy(string $field, $sort = ''): void

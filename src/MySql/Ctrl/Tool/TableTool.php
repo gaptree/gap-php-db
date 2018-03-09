@@ -67,8 +67,23 @@ class TableTool extends ToolBase
         return $this->makeJoinTool($joinPart);
     }
 
-    public function where(string $field): WhereCtrl
+    public function where(): WhereTool
+    {
+        $whereTool = new WhereTool($this->manipulateSql);
+        $whereTool->setWherePart($this->manipulateSql->getWherePart());
+        return $whereTool;
+    }
+
+    public function set(string $field): SetTool
+    {
+        $setTool = new SetTool($this->manipulateSql);
+        $setTool->setSetPart($this->manipulateSql->getSetPart($field));
+        return $setTool;
+    }
+    /*
+    public function where(): WhereCtrl
     {
         return new WhereCtrl($this->manipulateSql);
     }
+    */
 }

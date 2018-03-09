@@ -2,35 +2,41 @@
 namespace phpunit\Gap\Db\MySql\Ctrl;
 
 use PHPUnit\Framework\TestCase;
+use Gap\Db\Pdo\Param\ParamBase;
 use Gap\Db\MySql\Cnn;
 
 class SelectCtrlTest extends TestCase
 {
-    protected $cnn;
-
-    protected function setUp(): void
+    protected function getCnn(): Cnn
     {
         $pdo = $this->createMock('PDO');
         $serverId = 'xdfsa';
-        $this->cnn = new Cnn($pdo, $serverId);
+        return new Cnn($pdo, $serverId);
     }
 
     public function testFrom(): void
     {
-        $this->cnn->select('a.*', 'b.col1', 'b.col2')
-            ->from('tableA a', 'tableB b');
+        $cnn = $this->getCnn();
+        $cnn->select('a.*', 'b.col1', 'b.col2')
+            ->from('tableA a', 'tableB b')
+            ->where()
+                ->expect('a.col1')->beStr('v1');
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2'
             . ' FROM tableA a, tableB b'
+            . ' WHERE a.col1 = :k1'
             . ' LIMIT 10 OFFSET 0',
-            $this->cnn->sql()
+            $cnn->sql()
         );
     }
 
     public function testJoin(): void
     {
-        $this->cnn->select('a.*', 'b.col1', 'b.col2')
+        ParamBase::initIndex();
+
+        $cnn = $this->getCnn();
+        $cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b')
             ->leftJoin('tableC c', 'tableD d')
             ->onCond()
@@ -58,7 +64,7 @@ class SelectCtrlTest extends TestCase
             . ' GROUP BY a.col1 ASC'
             . ' ORDER BY a.col2 DESC'
             . ' LIMIT 28 OFFSET 3',
-            $this->cnn->sql()
+            $cnn->sql()
         );
     }
 

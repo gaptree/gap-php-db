@@ -11,8 +11,11 @@ class Cnn extends \Gap\Db\Pdo\Cnn
         return $this->currentCtrl;
     }
 
-    public function update(string ...$tableArr): Ctrl\UpdateCtrl
+    public function update(string ...$tableArr): Ctrl\Tool\TableTool
     {
+        $this->currentSql = new Sql\UpdateSql($this);
+        $this->currentCtrl = new Ctrl\UpdateCtrl($this->currentSql);
+        return $this->currentCtrl->update(...$tableArr);
     }
 
     public function delete(string ...$deleteArr): Ctrl\DeleteCtrl
