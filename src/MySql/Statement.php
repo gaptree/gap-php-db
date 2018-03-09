@@ -31,6 +31,11 @@ class Statement
         return new $class($this->fetchAssoc());
     }
 
+    public function list(string $class): RowCollection
+    {
+        return new RowCollection($this, $class);
+    }
+
     public function listAssoc(): array
     {
         $this->execute();

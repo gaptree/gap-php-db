@@ -6,7 +6,6 @@
 namespace Gap\Db\MySql\Sql;
 
 use Gap\Db\MySql\Statement;
-use Gap\Db\MySql\RowCollection;
 
 abstract class ManipulateSql extends SqlBase
 {
@@ -60,6 +59,14 @@ abstract class ManipulateSql extends SqlBase
         $this->orderByArr[] = $field . $sort;
     }
 
+    public function execute(): Statement
+    {
+        $stmt = $this->cnn->prepare($this->sql());
+        $stmt->bindParam(...$this->paramArr);
+        return $stmt;
+    }
+
+    /*
     public function fetchAssoc(): array
     {
         $this->limit(1);
@@ -84,13 +91,7 @@ abstract class ManipulateSql extends SqlBase
     {
         return $this->prepare()->listAssoc();
     }
-
-    protected function prepare(): Statement
-    {
-        $stmt = $this->cnn->prepare($this->sql());
-        $stmt->bindParam(...$this->paramArr);
-        return $stmt;
-    }
+    */
 
     /*
     public function ascGroupBy(string $field): void

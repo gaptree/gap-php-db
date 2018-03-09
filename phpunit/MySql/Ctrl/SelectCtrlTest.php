@@ -77,6 +77,7 @@ class SelectCtrlTest extends TestCase
 
         $fruit = $cnn->select('*')
             ->from('fruit')
+            ->execute()
             ->fetch(FruitDto::class);
 
         $this->assertEquals(
@@ -103,6 +104,7 @@ class SelectCtrlTest extends TestCase
 
         $fruits = $cnn->select('*')
             ->from('tableA')
+            ->execute()
             ->listAssoc();
 
         $this->assertEquals(
@@ -129,6 +131,7 @@ class SelectCtrlTest extends TestCase
 
         $fruits = $cnn->select('*')
             ->from('tableA')
+            ->execute()
             ->list(FruitDto::class);
 
         $fruits->rewind();

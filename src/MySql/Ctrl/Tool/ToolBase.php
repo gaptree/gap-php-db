@@ -2,7 +2,7 @@
 namespace Gap\Db\MySql\Ctrl\Tool;
 
 use Gap\Db\MySql\Sql\ManipulateSql;
-use Gap\Db\MySql\RowCollection;
+use Gap\Db\MySql\Statement;
 
 abstract class ToolBase
 {
@@ -34,23 +34,8 @@ abstract class ToolBase
         return $this;
     }
 
-    public function fetch(string $class)
+    public function execute(): Statement
     {
-        return $this->manipulateSql->fetch($class);
-    }
-
-    public function list(string $class): RowCollection
-    {
-        return $this->manipulateSql->list($class);
-    }
-
-    public function fetchAssoc(): array
-    {
-        return $this->manipulateSql->fetchAssoc();
-    }
-
-    public function listAssoc(): array
-    {
-        return $this->manipulateSql->listAssoc();
+        return $this->manipulateSql->execute();
     }
 }
