@@ -17,11 +17,6 @@ abstract class ToolBase
         $this->manipulateSql = $manipulateSql;
     }
 
-    public function sql(): string
-    {
-        return $this->manipulateSql->sql();
-    }
-
     public function offset(int $offset): self
     {
         $this->manipulateSql->offset($offset);

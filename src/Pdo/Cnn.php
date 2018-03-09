@@ -3,12 +3,14 @@ namespace Gap\Db\Pdo;
 
 use Gap\Db\CnnInterface;
 
-class Cnn implements CnnInterface
+class Cnn
 {
     protected $pdo;
     protected $serverId;
+    protected $trans;
 
-    protected $transLevel = 0;
+    protected $currentCtrl;
+    protected $currentSql;
 
     public function __construct(\PDO $pdo, string $serverId)
     {
@@ -16,46 +18,14 @@ class Cnn implements CnnInterface
         $this->serverId = $serverId;
     }
 
-    public function beginTransaction(): void
+    public function trans(): Transaction
     {
-        $this->transLevel++;
-        if ($this->transLevel > 1) {
-            return;
+        if ($this->trans) {
+            return $this->trans;
         }
 
-        if (!$this->pdo->beginTransaction()) {
-            throw new \Exception("db beginTransaction failed");
-        }
-    }
-
-    public function commit(): void
-    {
-        if ($this->transLevel <= 0) {
-            $this->transLevel = 0;
-            throw new \Exception("db commit failed");
-        }
-
-        $this->transLevel--;
-        if ($this->transLevel > 0) {
-            return;
-        }
-
-        if (!$this->pdo->commit()) {
-            throw new \Exception('db commit failed');
-        }
-    }
-
-    public function rollback(): void
-    {
-        if ($this->transLevel === 0) {
-            return;
-        }
-
-        $this->transLevel = 0;
-
-        if (!$this->pdo->rollback()) {
-            throw new \Exception('db rollback failed');
-        }
+        $this->trans = new Transaction($this->pdo);
+        return $this->trans;
     }
 
     public function zid(): string
@@ -71,5 +41,10 @@ class Cnn implements CnnInterface
     public function prepare(string $sql): Statement
     {
         return new Statement($this->pdo->prepare($sql));
+    }
+
+    public function sql(): string
+    {
+        return $this->currentSql->sql();
     }
 }

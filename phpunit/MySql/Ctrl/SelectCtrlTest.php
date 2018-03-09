@@ -17,20 +17,20 @@ class SelectCtrlTest extends TestCase
 
     public function testFrom(): void
     {
-        $sqlCtrl = $this->cnn->select('a.*', 'b.col1', 'b.col2')
+        $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b');
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2'
             . ' FROM tableA a, tableB b'
             . ' LIMIT 10 OFFSET 0',
-            $sqlCtrl->sql()
+            $this->cnn->sql()
         );
     }
 
     public function testJoin(): void
     {
-        $sqlCtrl = $this->cnn->select('a.*', 'b.col1', 'b.col2')
+        $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b')
             ->leftJoin('tableC c', 'tableD d')
             ->onCond()
@@ -58,7 +58,7 @@ class SelectCtrlTest extends TestCase
             . ' GROUP BY a.col1 ASC'
             . ' ORDER BY a.col2 DESC'
             . ' LIMIT 28 OFFSET 3',
-            $sqlCtrl->sql()
+            $this->cnn->sql()
         );
     }
 

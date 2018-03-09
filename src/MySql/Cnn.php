@@ -5,11 +5,10 @@ class Cnn extends \Gap\Db\Pdo\Cnn
 {
     public function select(string ...$selectArr): Ctrl\SelectCtrl
     {
-        $selectCtrl = (new Ctrl\SelectCtrl(
-            new Sql\SelectSql($this)
-        ));
-        $selectCtrl->select(...$selectArr);
-        return $selectCtrl;
+        $this->currentSql = new Sql\SelectSql($this);
+        $this->currentCtrl = new Ctrl\SelectCtrl($this->currentSql);
+        $this->currentCtrl->select(...$selectArr);
+        return $this->currentCtrl;
     }
 
     public function update(string ...$tableArr): Ctrl\UpdateCtrl
