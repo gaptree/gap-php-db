@@ -2,7 +2,7 @@
 namespace Gap\Db\MySql\Ctrl\Tool;
 
 use Gap\Db\MySql\Sql\ManipulateSql;
-use Gap\Db\MySql\Statement;
+use Gap\Db\Pdo\Statement;
 
 abstract class ToolBase
 {

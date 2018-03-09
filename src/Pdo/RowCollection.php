@@ -1,5 +1,5 @@
 <?php
-namespace Gap\Db\MySql;
+namespace Gap\Db\Pdo;
 
 // http://php.net/manual/en/class.iterator.php
 

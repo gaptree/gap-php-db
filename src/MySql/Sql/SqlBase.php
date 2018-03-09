@@ -2,9 +2,9 @@
 namespace Gap\Db\MySql\Sql;
 
 use Gap\Db\MySql\Cnn;
-use Gap\Db\MySql\Param\ParamStr;
-use Gap\Db\MySql\Param\ParamInt;
-use Gap\Db\MySql\Param\ParamBool;
+use Gap\Db\Pdo\Param\ParamStr;
+use Gap\Db\Pdo\Param\ParamInt;
+use Gap\Db\Pdo\Param\ParamBool;
 
 abstract class SqlBase
 {

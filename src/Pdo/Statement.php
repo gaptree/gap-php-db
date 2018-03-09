@@ -1,5 +1,5 @@
 <?php
-namespace Gap\Db\MySql;
+namespace Gap\Db\Pdo;
 
 use Gap\Db\MySql\Param\ParamBase;
 

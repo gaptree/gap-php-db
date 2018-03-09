@@ -15,8 +15,10 @@ interface CnnInterface
     public function zid(): string;
     public function zcode(): string;
 
+/*
     public function select(string ...$fieldArr);
     public function update(string ...$tableArr);
     public function insert(string $table);
     public function delete(string ...$tableArr);
+    */
 }

@@ -1,10 +1,10 @@
 <?php
 namespace Gap\Db\MySql\Ctrl\Tool\Support;
 
-use Gap\Db\MySql\Param\ParamStr;
-use Gap\Db\MySql\Param\ParamInt;
-use Gap\Db\MySql\Param\ParamBool;
-use Gap\Db\MySql\Param\ParamBase;
+use Gap\Db\Pdo\Param\ParamStr;
+use Gap\Db\Pdo\Param\ParamInt;
+use Gap\Db\Pdo\Param\ParamBool;
+use Gap\Db\Pdo\Param\ParamBase;
 
 trait ToolParamTrait
 {

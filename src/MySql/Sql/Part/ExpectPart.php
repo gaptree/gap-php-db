@@ -1,7 +1,7 @@
 <?php
 namespace Gap\Db\MySql\Sql\Part;
 
-use Gap\Db\MySql\Param\ParamBase;
+use Gap\Db\Pdo\Param\ParamBase;
 
 class ExpectPart extends PartBase
 {

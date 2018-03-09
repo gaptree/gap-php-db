@@ -2,7 +2,7 @@
 namespace phpunit\Gap\Db\MySql;
 
 use PHPUnit\Framework\TestCase;
-use Gap\Db\MySql\Cnn;
+use Gap\Db\Pdo\Cnn;
 
 class CnnTest extends TestCase
 {

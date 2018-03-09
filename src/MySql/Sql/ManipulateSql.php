@@ -5,7 +5,7 @@
 
 namespace Gap\Db\MySql\Sql;
 
-use Gap\Db\MySql\Statement;
+use Gap\Db\Pdo\Statement;
 
 abstract class ManipulateSql extends SqlBase
 {

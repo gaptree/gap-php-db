@@ -1,5 +1,5 @@
 <?php
-namespace Gap\Db\MySql\Param;
+namespace Gap\Db\Pdo\Param;
 
 class ParamStr extends ParamBase
 {
