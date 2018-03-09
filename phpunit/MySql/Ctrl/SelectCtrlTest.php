@@ -1,23 +1,13 @@
 <?php
 namespace phpunit\Gap\Db\MySql\Ctrl;
 
-use PHPUnit\Framework\TestCase;
-use Gap\Db\Pdo\Param\ParamBase;
 use Gap\Db\MySql\Cnn;
 
-class SelectCtrlTest extends TestCase
+class SelectCtrlTest extends CtrlTestBase
 {
-    protected function getCnn(): Cnn
-    {
-        $pdo = $this->createMock('PDO');
-        $serverId = 'xdfsa';
-        return new Cnn($pdo, $serverId);
-    }
-
     public function testFrom(): void
     {
-        $cnn = $this->getCnn();
-        $cnn->select('a.*', 'b.col1', 'b.col2')
+        $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b')
             ->where()
                 ->expect('a.col1')->beStr('v1');
@@ -27,16 +17,14 @@ class SelectCtrlTest extends TestCase
             . ' FROM tableA a, tableB b'
             . ' WHERE a.col1 = :k1'
             . ' LIMIT 10 OFFSET 0',
-            $cnn->sql()
+            $this->cnn->sql()
         );
     }
 
     public function testJoin(): void
     {
-        ParamBase::initIndex();
-
-        $cnn = $this->getCnn();
-        $cnn->select('a.*', 'b.col1', 'b.col2')
+        $this->initParamIndex();
+        $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b')
             ->leftJoin('tableC c', 'tableD d')
             ->onCond()
@@ -64,7 +52,7 @@ class SelectCtrlTest extends TestCase
             . ' GROUP BY a.col1 ASC'
             . ' ORDER BY a.col2 DESC'
             . ' LIMIT 28 OFFSET 3',
-            $cnn->sql()
+            $this->cnn->sql()
         );
     }
 

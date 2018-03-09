@@ -1,21 +1,8 @@
 <?php
 namespace phpunit\Gap\Db\MySql\Ctrl;
 
-use PHPUnit\Framework\TestCase;
-use Gap\Db\Pdo\Param\ParamBase;
-use Gap\Db\MySql\Cnn;
-
-class UpdateCtrlTest extends TestCase
+class UpdateCtrlTest extends CtrlTestBase
 {
-    protected $cnn;
-
-    protected function setUp(): void
-    {
-        $pdo = $this->createMock('PDO');
-        $serverId = 'xdfsa';
-        $this->cnn = new Cnn($pdo, $serverId);
-    }
-
     public function testSimple(): void
     {
         $this->initParamIndex();
@@ -52,10 +39,5 @@ class UpdateCtrlTest extends TestCase
             . ' WHERE a.col1 = :k3',
             $this->cnn->sql()
         );
-    }
-
-    protected function initParamIndex(): void
-    {
-        ParamBase::initIndex();
     }
 }
