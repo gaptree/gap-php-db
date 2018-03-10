@@ -1,7 +1,7 @@
 <?php
 namespace Gap\Db\Pdo;
 
-use Gap\Db\CnnInterface;
+//use Gap\Db\CnnInterface;
 
 class Cnn
 {

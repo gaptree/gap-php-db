@@ -13,7 +13,7 @@ class DbManager
         $this->serverId = $serverId;
     }
 
-    public function connect(string $name): CnnInterface
+    public function connect(string $name)
     {
         if (isset($this->cnnArr[$name])) {
             return $this->cnnArr[$name];
