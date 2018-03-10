@@ -1,7 +1,7 @@
 <?php
 namespace Gap\Db\Pdo;
 
-use Gap\Db\MySql\Param\ParamBase;
+use Gap\Db\Pdo\Param\ParamBase;
 
 class Statement
 {

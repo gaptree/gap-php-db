@@ -16,6 +16,9 @@ class CtrlTestBase extends TestCase
         $this->cnn = new Cnn($pdo, $serverId);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD)
+     */
     protected function initParamIndex(): void
     {
         ParamBase::initIndex();
