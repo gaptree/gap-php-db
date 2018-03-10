@@ -20,6 +20,10 @@ class Cnn extends \Gap\Db\Pdo\Cnn
 
     public function delete(string ...$deleteArr): Ctrl\DeleteCtrl
     {
+        $this->currentSql = new Sql\DeleteSql($this);
+        $this->currentCtrl = new Ctrl\DeleteCtrl($this->currentSql);
+        $this->currentCtrl->delete(...$deleteArr);
+        return $this->currentCtrl;
     }
 
     public function insert(string $into): Ctrl\InsertCtrl
