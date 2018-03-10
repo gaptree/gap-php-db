@@ -7,6 +7,7 @@ class SelectCtrlTest extends CtrlTestBase
 {
     public function testFrom(): void
     {
+        $this->initParamIndex();
         $this->cnn->select('a.*', 'b.col1', 'b.col2')
             ->from('tableA a', 'tableB b')
             ->where()

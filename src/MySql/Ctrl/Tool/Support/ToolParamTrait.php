@@ -4,6 +4,7 @@ namespace Gap\Db\MySql\Ctrl\Tool\Support;
 use Gap\Db\Pdo\Param\ParamStr;
 use Gap\Db\Pdo\Param\ParamInt;
 use Gap\Db\Pdo\Param\ParamBool;
+use Gap\Db\Pdo\Param\ParamDateTime;
 use Gap\Db\Pdo\Param\ParamBase;
 
 trait ToolParamTrait
@@ -33,8 +34,9 @@ trait ToolParamTrait
         return is_int($val) ? $this->paramInt($val) : $this->paramFloat($val);
     }
 
-    public function paramDateTime(\DateTime $dateTime): ParamStr
+    public function paramDateTime(\DateTime $dateTime): ParamDateTime
     {
-        return $this->paramStr($dateTime->format('Y-m-d H:i:s.u'));
+        return $this->manipulateSql->paramDateTime($dateTime);
+        //return $this->paramStr($dateTime->format('Y-m-d H:i:s.u'));
     }
 }

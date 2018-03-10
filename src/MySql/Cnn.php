@@ -24,5 +24,9 @@ class Cnn extends \Gap\Db\Pdo\Cnn
 
     public function insert(string $into): Ctrl\InsertCtrl
     {
+        $this->currentSql = new Sql\InsertSql($this);
+        $this->currentCtrl = new Ctrl\InsertCtrl($this->currentSql);
+        $this->currentCtrl->into($into);
+        return $this->currentCtrl;
     }
 }

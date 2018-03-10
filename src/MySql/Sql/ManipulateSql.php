@@ -5,8 +5,6 @@
 
 namespace Gap\Db\MySql\Sql;
 
-use Gap\Db\Pdo\Statement;
-
 abstract class ManipulateSql extends SqlBase
 {
     protected $tablePart;
@@ -65,13 +63,6 @@ abstract class ManipulateSql extends SqlBase
     {
         $sort = $sort ? ' ' . $sort : '';
         $this->orderByArr[] = $field . $sort;
-    }
-
-    public function execute(): Statement
-    {
-        $stmt = $this->cnn->prepare($this->sql());
-        $stmt->bindParam(...$this->paramArr);
-        return $stmt;
     }
 
     /*

@@ -18,6 +18,11 @@ abstract class ParamBase
         $this->key = ':k' . strval(self::$index++);
     }
 
+    public function __toString(): string
+    {
+        return $this->key();
+    }
+
     public function key(): string
     {
         return $this->key;
