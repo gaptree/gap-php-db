@@ -1,7 +1,7 @@
 <?php
 namespace Gap\Db;
 
-class DbManager
+class DbManager implements DbManagerInterface
 {
     protected $optsArr = [];
     protected $cnnArr = [];
