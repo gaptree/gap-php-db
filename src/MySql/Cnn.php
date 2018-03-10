@@ -1,7 +1,9 @@
 <?php
 namespace Gap\Db\MySql;
 
-class Cnn extends \Gap\Db\Pdo\Cnn
+use Gap\Db\CnnInterface;
+
+class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
 {
     public function select(string ...$selectArr): Ctrl\SelectCtrl
     {
