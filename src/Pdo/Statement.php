@@ -42,10 +42,10 @@ class Statement
         return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function bindParam(ParamBase ...$paramArr): void
+    public function bindValue(ParamBase ...$paramArr): void
     {
         foreach ($paramArr as $param) {
-            $this->stmt->bindParam($param->key(), $param->val(), $param->type());
+            $this->stmt->bindValue($param->key(), $param->val(), $param->type());
         }
     }
 }
