@@ -22,8 +22,11 @@ class Statement
     public function fetchAssoc(): array
     {
         //$this->stmt->setFetchMode(\PDO::FETCH_ASSOC);
-        $this->execute();
-        return $this->stmt->fetch(\PDO::FETCH_ASSOC);
+        $res = $this->stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($res === false) {
+            return [];
+        }
+        return $res;
     }
 
     public function fetch(string $class)
@@ -42,7 +45,7 @@ class Statement
         return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function bindValue(ParamBase ...$paramArr): void
+    public function bindParam(ParamBase ...$paramArr): void
     {
         foreach ($paramArr as $param) {
             $this->stmt->bindValue($param->key(), $param->val(), $param->type());

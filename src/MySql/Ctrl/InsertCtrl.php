@@ -37,4 +37,9 @@ class InsertCtrl extends CtrlBase
     {
         return $this->insertSql->execute();
     }
+
+    public function getInsertSql(): InsertSql
+    {
+        return $this->insertSql;
+    }
 }

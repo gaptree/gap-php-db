@@ -50,7 +50,8 @@ abstract class SqlBase
     public function execute(): Statement
     {
         $stmt = $this->cnn->prepare($this->sql());
-        $stmt->bindValue(...$this->paramArr);
+        $stmt->bindParam(...$this->paramArr);
+        $stmt->execute();
         return $stmt;
     }
 
