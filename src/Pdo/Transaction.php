@@ -11,7 +11,7 @@ class Transaction
         $this->pdo = $pdo;
     }
 
-    public function beginTransaction(): void
+    public function begin(): void
     {
         $this->transLevel++;
         if ($this->transLevel > 1) {
