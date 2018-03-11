@@ -1,9 +1,7 @@
 <?php
 namespace Gap\Db\Pdo;
 
-// http://php.net/manual/en/class.iterator.php
-
-class RowCollection implements \Iterator
+class RowCollection implements \Gap\Db\CollectionInterface
 {
     protected $stmt;
     protected $class;

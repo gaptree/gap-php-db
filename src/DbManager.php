@@ -7,6 +7,10 @@ class DbManager implements DbManagerInterface
     protected $cnnArr = [];
     protected $serverId = '';
 
+    protected $driverMap = [
+        'mysql' => 'MySql'
+    ];
+
     public function __construct(array $optsArr, string $serverId)
     {
         $this->optsArr = $optsArr;
@@ -48,9 +52,15 @@ class DbManager implements DbManagerInterface
         );
         // todo ATTR_PERSISTENT true OR false
 
-        $class = "Gap\\Db\\" . ucfirst($driver) . "\\Cnn";
+        $driverClass = $this->getDriverClass($driver);
+        $class = "Gap\\Db\\{$driverClass}\\Cnn";
         $this->cnnArr[$name] = new $class($pdo, $this->serverId);
 
         return $this->cnnArr[$name];
+    }
+
+    protected function getDriverClass(string $driver): string
+    {
+        return $this->driverMap[$driver] ?? '';
     }
 }
