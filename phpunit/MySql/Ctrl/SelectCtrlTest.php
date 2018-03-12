@@ -22,6 +22,23 @@ class SelectCtrlTest extends CtrlTestBase
         );
     }
 
+    public function testLike(): void
+    {
+        $this->initParamIndex();
+        $this->cnn->select('a.*', 'b.col1', 'b.col2')
+            ->from('tableA a', 'tableB b')
+            ->where()
+                ->expect('a.col1')->like('%hello%');
+
+        $this->assertEquals(
+            'SELECT a.*, b.col1, b.col2'
+            . ' FROM tableA a, tableB b'
+            . ' WHERE a.col1 LIKE :k1'
+            . ' LIMIT 10 OFFSET 0',
+            $this->cnn->sql()
+        );
+    }
+
     public function testJoin(): void
     {
         $this->initParamIndex();

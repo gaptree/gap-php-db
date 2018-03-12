@@ -42,6 +42,12 @@ class ExpectTool extends ToolBase
         return $this->whereTool;
     }
 
+    public function like(string $val): WhereTool
+    {
+        $this->expectPart->cond('LIKE', $this->paramStr($val));
+        return $this->whereTool;
+    }
+
     public function greater($val): WhereTool
     {
         $this->expectPart->cond('>', $this->paramNumber($val));
