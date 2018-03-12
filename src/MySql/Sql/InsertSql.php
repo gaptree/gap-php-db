@@ -7,21 +7,22 @@ class InsertSql extends SqlBase
     protected $valuePartArr = [];
     protected $into;
 
-    public function field(string ...$fieldArr): void
+    public function field(string ...$fieldArr): self
     {
         $this->fieldArr = $fieldArr;
+        return $this;
     }
 
-    public function getValuePart(): Part\ValuePart
+    public function value(Part\ValuePart $valuePart): self
     {
-        $valuePart = new Part\ValuePart();
         $this->valuePartArr[] = $valuePart;
-        return $valuePart;
+        return $this;
     }
 
-    public function into(string $into): void
+    public function into(string $into): self
     {
         $this->into = $into;
+        return $this;
     }
 
     public function sql(): string

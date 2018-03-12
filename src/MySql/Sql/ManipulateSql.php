@@ -12,21 +12,69 @@ abstract class ManipulateSql extends SqlBase
 
     protected $groupByArr = [];
     protected $orderByArr = [];
-    protected $setPartArr = [];
 
     protected $limit = 10;
     protected $offset = 0;
 
-    public function limit(int $limit): void
+    public function limit(int $limit): self
     {
         $this->limit = $limit;
+        return $this;
     }
 
-    public function offset(int $offset): void
+    public function offset(int $offset): self
     {
         $this->offset = $offset;
+        return $this;
     }
 
+    public function groupBy(string $field, $sort = ''): self
+    {
+        $sort = $sort ? ' ' . $sort : '';
+        $this->groupByArr[] = $field . $sort;
+        return $this;
+    }
+
+    public function ascGroupBy(string $field): self
+    {
+        return $this->groupBy($field, 'ASC');
+    }
+
+    public function descGroupBy(string $field): self
+    {
+        return $this->groupBy($field, 'DESC');
+    }
+
+    public function orderBy(string $field, $sort = ''): self
+    {
+        $sort = $sort ? ' ' . $sort : '';
+        $this->orderByArr[] = $field . $sort;
+        return $this;
+    }
+
+    public function ascOrderBy(string $field): self
+    {
+        return $this->orderBy($field, 'ASC');
+    }
+
+    public function descOrderBy(string $field): self
+    {
+        return $this->orderBy($field, 'DESC');
+    }
+
+    public function table(Part\TablePart $table): self
+    {
+        $this->tablePart = $table;
+        return $this;
+    }
+
+    public function where(Part\CondPart $cond): self
+    {
+        $this->wherePart = $cond;
+        return $this;
+    }
+
+    /*
     public function getTablePart(): Part\TablePart
     {
         if ($this->tablePart) {
@@ -35,7 +83,9 @@ abstract class ManipulateSql extends SqlBase
         $this->tablePart = new Part\TablePart();
         return $this->tablePart;
     }
+    */
 
+    /*
     public function getWherePart(): Part\WherePart
     {
         if ($this->wherePart) {
@@ -45,25 +95,7 @@ abstract class ManipulateSql extends SqlBase
         $this->wherePart = new Part\WherePart();
         return $this->wherePart;
     }
-
-    public function getSetPart(string $field): Part\SetPart
-    {
-        $setPart = new Part\SetPart($field);
-        $this->setPartArr[] = $setPart;
-        return $setPart;
-    }
-
-    public function groupBy(string $field, $sort = ''): void
-    {
-        $sort = $sort ? ' ' . $sort : '';
-        $this->groupByArr[] = $field . $sort;
-    }
-
-    public function orderBy(string $field, $sort = ''): void
-    {
-        $sort = $sort ? ' ' . $sort : '';
-        $this->orderByArr[] = $field . $sort;
-    }
+    */
 
     /*
     public function fetchAssoc(): array

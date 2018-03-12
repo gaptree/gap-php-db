@@ -5,9 +5,16 @@ class DeleteSql extends ManipulateSql
 {
     protected $deleteArr;
 
-    public function delete(string ...$deleteArr): void
+    public function delete(string ...$deleteArr): self
     {
         $this->deleteArr = $deleteArr;
+        return $this;
+    }
+
+    public function from(Part\TablePart $tablePart): self
+    {
+        $this->table($tablePart);
+        return $this;
     }
 
     public function sql(): string

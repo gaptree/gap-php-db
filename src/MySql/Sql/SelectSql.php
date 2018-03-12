@@ -1,13 +1,22 @@
 <?php
 namespace Gap\Db\MySql\Sql;
 
+use Gap\Db\MySql\Collection;
+
 class SelectSql extends ManipulateSql
 {
     protected $selectArr;
 
-    public function select(string ...$selectArr): void
+    public function select(string ...$selectArr): self
     {
         $this->selectArr = $selectArr;
+        return $this;
+    }
+
+    public function from(Part\TablePart $table): self
+    {
+        $this->table($table);
+        return $this;
     }
 
     public function sql(): string
@@ -31,5 +40,26 @@ class SelectSql extends ManipulateSql
         $sql .= ' OFFSET ' . $this->offset;
 
         return $sql;
+    }
+
+    public function fetchAssoc(): array
+    {
+        return $this->query()->fetchAssoc();
+    }
+
+    public function listAssoc(): array
+    {
+        return $this->query()
+            ->listAssoc();
+    }
+
+    public function fetch(string $class)
+    {
+        return $this->query()->fetch($class);
+    }
+
+    public function list(string $class)
+    {
+        return new Collection($this, $class);
     }
 }

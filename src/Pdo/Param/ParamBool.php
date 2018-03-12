@@ -9,7 +9,7 @@ class ParamBool extends ParamBase
     {
         $this->val = $val;
         $this->type = \PDO::PARAM_BOOL;
-        parent::__construct();
+        $this->initKey();
     }
 
     public function val(): bool

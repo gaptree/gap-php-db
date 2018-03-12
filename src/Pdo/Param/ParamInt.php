@@ -9,7 +9,7 @@ class ParamInt extends ParamBase
     {
         $this->val = $val;
         $this->type = \PDO::PARAM_INT;
-        parent::__construct();
+        $this->initKey();
     }
 
     public function val(): int

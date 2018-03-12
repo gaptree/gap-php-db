@@ -12,8 +12,9 @@ class ValuePart extends PartBase
         return '(' . implode(', ', $this->paramArr) . ')';
     }
 
-    public function add(ParamBase $param): void
+    public function add(ParamBase $param): self
     {
         $this->paramArr[] = $param;
+        return $this;
     }
 }

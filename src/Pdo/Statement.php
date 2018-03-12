@@ -23,7 +23,7 @@ class Statement
     {
         //$this->stmt->setFetchMode(\PDO::FETCH_ASSOC);
         $res = $this->stmt->fetch(\PDO::FETCH_ASSOC);
-        if ($res === false) {
+        if (empty($res)) {
             return [];
         }
         return $res;
@@ -38,10 +38,12 @@ class Statement
         return null;
     }
 
+    /*
     public function list(string $class): RowCollection
     {
         return new RowCollection($this, $class);
     }
+    */
 
     public function listAssoc(): array
     {

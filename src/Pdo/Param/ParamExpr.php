@@ -1,7 +1,7 @@
 <?php
 namespace Gap\Db\Pdo\Param;
 
-class ParamStr extends ParamBase
+class ParamExpr extends ParamBase
 {
     protected $val;
 
@@ -9,10 +9,14 @@ class ParamStr extends ParamBase
     {
         $this->val = $val;
         $this->type = \PDO::PARAM_STR;
-        $this->initKey();
     }
 
     public function val(): string
+    {
+        return $this->val;
+    }
+
+    public function key(): string
     {
         return $this->val;
     }

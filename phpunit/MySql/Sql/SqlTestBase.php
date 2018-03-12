@@ -1,19 +1,17 @@
 <?php
-namespace phpunit\Gap\Db\MySql\Ctrl;
+namespace phpunit\Gap\Db\MySql\Sql;
 
 use PHPUnit\Framework\TestCase;
 use Gap\Db\Pdo\Param\ParamBase;
 use Gap\Db\MySql\Cnn;
 
-class CtrlTestBase extends TestCase
+class SqlTestBase extends TestCase
 {
-    protected $cnn;
-
-    protected function setUp(): void
+    protected function getCnn(): Cnn
     {
         $pdo = $this->createMock('PDO');
-        $serverId = 'xdfsa';
-        $this->cnn = new Cnn($pdo, $serverId);
+        $serverId = 'gap-db';
+        return new Cnn($pdo, $serverId);
     }
 
     /**

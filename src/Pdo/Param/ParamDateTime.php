@@ -9,7 +9,7 @@ class ParamDateTime extends ParamBase
     {
         $this->val = $val;
         $this->type = \PDO::PARAM_STR;
-        parent::__construct();
+        $this->initKey();
     }
 
     public function val(): string

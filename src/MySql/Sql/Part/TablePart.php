@@ -6,17 +6,38 @@ class TablePart extends PartBase
     protected $tableArr;
     protected $joinPartArr = [];
 
-    public function table(string ...$tableArr): void
+    public function __construct(string ...$tableArr)
     {
         $this->tableArr = $tableArr;
     }
 
-    public function getJoinPart(): JoinPart
+    public function join(string ...$tableArr): JoinPart
     {
-        $joinPart = new JoinPart();
+        $joinPart = new JoinPart($this, ...$tableArr);
         $this->joinPartArr[] = $joinPart;
         return $joinPart;
     }
+
+    public function leftJoin(string ...$tableArr): JoinPart
+    {
+        return $this->join(...$tableArr)->pre('LEFT');
+    }
+    
+    public function rightJoin(string ...$tableArr): JoinPart
+    {
+        return $this->join(...$tableArr)->pre('RIGHT');
+    }
+    
+    public function innerJoin(string ...$tableArr): JoinPart
+    {
+        return $this->join(...$tableArr)->pre('INNER');
+    }
+    
+    public function outerJoin(string ...$tableArr): JoinPart
+    {
+        return $this->join(...$tableArr)->pre('OUTER');
+    }
+    
 
     public function partSql(): string
     {

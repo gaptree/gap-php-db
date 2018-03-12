@@ -5,34 +5,38 @@ use Gap\Db\CnnInterface;
 
 class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
 {
-    public function select(string ...$selectArr): Ctrl\SelectCtrl
+    public function select(string ...$selectArr): Sql\SelectSql
     {
-        $this->currentSql = new Sql\SelectSql($this);
-        $this->currentCtrl = new Ctrl\SelectCtrl($this->currentSql);
-        $this->currentCtrl->select(...$selectArr);
-        return $this->currentCtrl;
+        return (new Sql\SelectSql($this))->select(...$selectArr);
     }
 
-    public function update(string ...$tableArr): Ctrl\Tool\TableTool
+    public function update(Sql\Part\TablePart $tablePart): Sql\UpdateSql
     {
-        $this->currentSql = new Sql\UpdateSql($this);
-        $this->currentCtrl = new Ctrl\UpdateCtrl($this->currentSql);
-        return $this->currentCtrl->update(...$tableArr);
+        return (new Sql\UpdateSql($this))->update($tablePart);
     }
 
-    public function delete(string ...$deleteArr): Ctrl\DeleteCtrl
+    public function delete(string ...$deleteArr): Sql\DeleteSql
     {
-        $this->currentSql = new Sql\DeleteSql($this);
-        $this->currentCtrl = new Ctrl\DeleteCtrl($this->currentSql);
-        $this->currentCtrl->delete(...$deleteArr);
-        return $this->currentCtrl;
+        return (new Sql\DeleteSql($this))->delete(...$deleteArr);
     }
 
-    public function insert(string $into): Ctrl\InsertCtrl
+    public function insert(string $into): Sql\InsertSql
     {
-        $this->currentSql = new Sql\InsertSql($this);
-        $this->currentCtrl = new Ctrl\InsertCtrl($this->currentSql);
-        $this->currentCtrl->into($into);
-        return $this->currentCtrl;
+        return (new Sql\InsertSql($this))->into($into);
+    }
+
+    public function table(string ...$tableArr): Sql\Part\TablePart
+    {
+        return new Sql\Part\TablePart(...$tableArr);
+    }
+
+    public function cond(): Sql\Part\CondPart
+    {
+        return new Sql\Part\CondPart();
+    }
+
+    public function value(): Sql\Part\ValuePart
+    {
+        return new Sql\Part\ValuePart();
     }
 }

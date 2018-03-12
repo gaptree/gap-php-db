@@ -3,12 +3,14 @@ namespace Gap\Db\MySql\Sql\Part;
 
 class JoinPart extends PartBase
 {
+    protected $tablePart;
     protected $tableArr = [];
     protected $pre = '';
-    protected $wherePart;
+    protected $condPart;
 
-    public function table(string ...$tableArr): void
+    public function __construct(TablePart $tablePart, string ...$tableArr)
     {
+        $this->tablePart = $tablePart;
         $this->tableArr = $tableArr;
     }
 
@@ -17,11 +19,18 @@ class JoinPart extends PartBase
         $sql = $this->pre ? ($this->pre . ' ') : '';
         $sql .= 'JOIN ' . implode(', ', $this->tableArr);
         
-        if ($this->wherePart) {
-            $sql .=  ' ON ' . $this->wherePart->partSql();
+        if ($this->condPart) {
+            $sql .=  ' ON ' . $this->condPart->partSql();
         }
         return $sql;
     }
+
+    public function pre(string $pre): self
+    {
+        $this->pre = $pre; // LEFT, RIGHT, INNER, OUTER
+        return $this;
+    }
+    /*
     public function left(): void
     {
         $this->pre = 'LEFT';
@@ -41,14 +50,11 @@ class JoinPart extends PartBase
     {
         $this->pre = 'outer';
     }
+    */
 
-    public function getWherePart(): WherePart
+    public function onCond(CondPart $condPart): TablePart
     {
-        if ($this->wherePart) {
-            return $this->wherePart;
-        }
-
-        $this->wherePart = new WherePart();
-        return $this->wherePart;
+        $this->condPart = $condPart;
+        return $this->tablePart;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace phpunit\Gap\Db\MySql\Ctrl;
+namespace phpunit\Gap\Db\MySql\Sql;
 
 use Gap\Dto\DtoBase;
 

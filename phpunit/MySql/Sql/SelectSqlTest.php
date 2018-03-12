@@ -1,63 +1,79 @@
 <?php
-namespace phpunit\Gap\Db\MySql\Ctrl;
+namespace phpunit\Gap\Db\MySql\Sql;
 
 use Gap\Db\MySql\Cnn;
 
-class SelectCtrlTest extends CtrlTestBase
+class SelectSqlTest extends SqlTestBase
 {
-    public function testFrom(): void
+    public function testSimple(): void
     {
         $this->initParamIndex();
-        $this->cnn->select('a.*', 'b.col1', 'b.col2')
-            ->from('tableA a', 'tableB b')
-            ->where()
-                ->expect('a.col1')->beStr('v1');
+
+        $cnn = $this->getCnn();
+        $select = $cnn->select('a.*', 'b.col1', 'b.col2')
+            ->from(
+                $cnn->table('tableA a', 'tableB b')
+            )->where(
+                $cnn->cond()
+                    ->expect('a.col1')->equal($cnn->str('v1'))
+            );
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2'
             . ' FROM tableA a, tableB b'
             . ' WHERE a.col1 = :k1'
             . ' LIMIT 10 OFFSET 0',
-            $this->cnn->sql()
+            $select->sql()
         );
     }
 
     public function testLike(): void
     {
         $this->initParamIndex();
-        $this->cnn->select('a.*', 'b.col1', 'b.col2')
-            ->from('tableA a', 'tableB b')
-            ->where()
-                ->expect('a.col1')->like('%hello%');
+        $cnn = $this->getCnn();
+        $select = $cnn->select('a.*', 'b.col1', 'b.col2')
+            ->from(
+                $cnn->table('tableA a', 'tableB b')
+            )->where(
+                $cnn->cond()
+                    ->expect('a.col1')->like($cnn->str('%hello%'))
+            );
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2'
             . ' FROM tableA a, tableB b'
             . ' WHERE a.col1 LIKE :k1'
             . ' LIMIT 10 OFFSET 0',
-            $this->cnn->sql()
+            $select->sql()
         );
     }
 
     public function testJoin(): void
     {
         $this->initParamIndex();
-        $this->cnn->select('a.*', 'b.col1', 'b.col2')
-            ->from('tableA a', 'tableB b')
-            ->leftJoin('tableC c', 'tableD d')
-            ->onCond()
-                ->expect('c.col1')->beExpr('a.col1')
-                ->andExpect('d.col2')->beExpr('b.col2')
-            ->where()
-                ->expect('a.col1')->greater(9)
-                ->andGroup()
-                    ->expect('a.col2')->beStr('v2')
-                    ->orExpect('a.col3')->beInt(3)
-                ->end()
-                ->andExpect('a.col4')->beDateTime(new \DateTime())
-                ->limit(28)->offset(3)
-                ->ascGroupBy('a.col1')
-                ->descOrderBy('a.col2');
+        $cnn = $this->getCnn();
+        $select = $cnn->select('a.*', 'b.col1', 'b.col2')
+            ->from(
+                $cnn->table('tableA a', 'tableB b')
+                    ->leftJoin('tableC c', 'tableD d')
+                    ->onCond(
+                        $cnn->cond()
+                            ->expect('c.col1')->equal($cnn->expr('a.col1'))
+                            ->andExpect('d.col2')->equal($cnn->expr('b.col2'))
+                    )
+            )->where(
+                $cnn->cond()
+                    ->expect('a.col1')->greater($cnn->int(9))
+                    ->andGroup(
+                        $cnn->cond()
+                            ->expect('a.col2')->equal($cnn->str('v2'))
+                            ->orExpect('a.col3')->equal($cnn->int(3))
+                    )
+                    ->andExpect('a.col4')->equal($cnn->dateTime(new \DateTime()))
+            )
+            ->ascGroupBy('a.col1')
+            ->descOrderBy('a.col2')
+            ->limit(28)->offset(3);
 
         $this->assertEquals(
             'SELECT a.*, b.col1, b.col2'
@@ -70,7 +86,7 @@ class SelectCtrlTest extends CtrlTestBase
             . ' GROUP BY a.col1 ASC'
             . ' ORDER BY a.col2 DESC'
             . ' LIMIT 28 OFFSET 3',
-            $this->cnn->sql()
+            $select->sql()
         );
     }
 
@@ -88,8 +104,7 @@ class SelectCtrlTest extends CtrlTestBase
         $cnn = new Cnn($pdo, $serverId);
 
         $fruit = $cnn->select('*')
-            ->from('fruit')
-            ->execute()
+            ->from($cnn->table('fruit'))
             ->fetch(FruitDto::class);
 
         $this->assertEquals(
@@ -115,8 +130,7 @@ class SelectCtrlTest extends CtrlTestBase
         $cnn = new Cnn($pdo, $serverId);
 
         $fruits = $cnn->select('*')
-            ->from('tableA')
-            ->execute()
+            ->from($cnn->table('tableA'))
             ->listAssoc();
 
         $this->assertEquals(
@@ -133,26 +147,25 @@ class SelectCtrlTest extends CtrlTestBase
         $pdo = $this->createMock('PDO');
         $stmt = $this->createMock('PDOStatement');
         $stmt->method('execute')->will($this->returnValue(true));
-        $stmt->method('fetch')->will($this->returnValue([
-            'name' => 'apple', 'color'=> 'green',
-        ]));
+        $stmt->method('fetch')->will($this->onConsecutiveCalls(
+            ['name' => 'apple', 'color'=> 'green'],
+            ['name' => 'pear', 'color' => 'yellow']
+        ));
         $pdo->method('prepare')->will($this->returnValue($stmt));
 
         $serverId = 'xdfsa';
         $cnn = new Cnn($pdo, $serverId);
 
         $fruits = $cnn->select('*')
-            ->from('tableA')
-            ->execute()
+            ->from($cnn->table('tableA'))
             ->list(FruitDto::class);
 
-        $fruits->rewind();
-
         $this->assertEquals(
-            new FruitDto([
-                'name' => 'apple', 'color'=> 'green',
-            ]),
-            $fruits->current()
+            [
+                new FruitDto(['name' => 'apple', 'color'=> 'green',]),
+                new FruitDto(['name' => 'pear', 'color' => 'yellow'])
+            ],
+            $fruits->toArray()
         );
     }
 }

@@ -13,7 +13,7 @@ abstract class ParamBase
         self::$index = 1;
     }
 
-    public function __construct()
+    public function initKey()
     {
         $this->key = ':k' . strval(self::$index++);
     }
