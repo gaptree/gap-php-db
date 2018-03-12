@@ -33,5 +33,10 @@ abstract class SqlBase
         return $this->cnn->query($this->sql());
     }
 
+    public function execute(): Statement
+    {
+        return $this->query();
+    }
+
     abstract public function sql(): string;
 }
