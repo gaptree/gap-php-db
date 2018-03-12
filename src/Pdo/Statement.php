@@ -31,7 +31,11 @@ class Statement
 
     public function fetch(string $class)
     {
-        return new $class($this->fetchAssoc());
+        if ($arr = $this->fetchAssoc()) {
+            return new $class($arr);
+        }
+
+        return null;
     }
 
     public function list(string $class): RowCollection
