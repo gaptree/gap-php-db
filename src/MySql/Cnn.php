@@ -5,38 +5,37 @@ use Gap\Db\CnnInterface;
 
 class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
 {
-    public function select(string ...$selectArr): Sql\SelectSql
+    use CnnSqlTrait;
+
+    public function ssb(): SqlBuilder\SelectSqlBuilder
     {
-        return (new Sql\SelectSql($this))->select(...$selectArr);
+        return new SqlBuilder\SelectSqlBuilder(
+            $this,
+            new Sql\SelectSql($this)
+        );
     }
 
-    public function update(Sql\Part\TablePart $tablePart): Sql\UpdateSql
+    public function dsb(): SqlBuilder\DeleteSqlBuilder
     {
-        return (new Sql\UpdateSql($this))->update($tablePart);
+        return new SqlBuilder\DeleteSqlBuilder(
+            $this,
+            new Sql\DeleteSql($this)
+        );
     }
 
-    public function delete(string ...$deleteArr): Sql\DeleteSql
+    public function usb(): SqlBuilder\UpdateSqlBuilder
     {
-        return (new Sql\DeleteSql($this))->delete(...$deleteArr);
+        return new SqlBuilder\UpdateSqlBuilder(
+            $this,
+            new Sql\UpdateSql($this)
+        );
     }
 
-    public function insert(string $into): Sql\InsertSql
+    public function isb(): SqlBuilder\InsertSqlBuilder
     {
-        return (new Sql\InsertSql($this))->into($into);
-    }
-
-    public function table(string ...$tableArr): Sql\Part\TablePart
-    {
-        return new Sql\Part\TablePart(...$tableArr);
-    }
-
-    public function cond(): Sql\Part\CondPart
-    {
-        return new Sql\Part\CondPart();
-    }
-
-    public function value(): Sql\Part\ValuePart
-    {
-        return new Sql\Part\ValuePart();
+        return new SqlBuilder\InsertSqlBuilder(
+            $this,
+            new Sql\InsertSql($this)
+        );
     }
 }
