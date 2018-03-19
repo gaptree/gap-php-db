@@ -22,7 +22,7 @@ class SelectSqlTest extends SqlTestBase
             'SELECT a.*, b.col1, b.col2'
             . ' FROM tableA a, tableB b'
             . ' WHERE a.col1 = :k1'
-            . ' LIMIT 10 OFFSET 0',
+            . ' LIMIT 10',
             $select->sql()
         );
     }
@@ -43,7 +43,7 @@ class SelectSqlTest extends SqlTestBase
             'SELECT a.*, b.col1, b.col2'
             . ' FROM tableA a, tableB b'
             . ' WHERE a.col1 LIKE :k1'
-            . ' LIMIT 10 OFFSET 0',
+            . ' LIMIT 10',
             $select->sql()
         );
     }

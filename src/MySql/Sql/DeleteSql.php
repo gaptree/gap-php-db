@@ -3,6 +3,9 @@ namespace Gap\Db\MySql\Sql;
 
 class DeleteSql extends ManipulateSql
 {
+    protected $limit = 0;
+    protected $offset = 0;
+
     protected $deleteArr;
 
     public function delete(string ...$deleteArr): self
@@ -34,8 +37,13 @@ class DeleteSql extends ManipulateSql
             $sql .= ' ORDER BY ' . implode(', ', $this->orderByArr);
         }
 
-        $sql .= ' LIMIT ' . $this->limit;
-        $sql .= ' OFFSET ' . $this->offset;
+        if ($this->limit) {
+            $sql .= ' LIMIT ' . $this->limit;
+        }
+
+        if ($this->offset) {
+            $sql .= ' OFFSET ' . $this->offset;
+        }
 
         return $sql;
     }

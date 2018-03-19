@@ -26,7 +26,7 @@ class DeleteSqlBuilderTest extends SqlBuilderTestBase
                 ->endGroup()
                 ->andExpect('a.col4')->equal()->dateTime(new \DateTime())
             ->end()
-            ->limit(28)->offset(3)
+            ->limit(28)
             ->ascGroupBy('a.col1')
             ->descOrderBy('a.col2');
 
@@ -40,7 +40,7 @@ class DeleteSqlBuilderTest extends SqlBuilderTestBase
             . ' AND a.col4 = :k4'
             . ' GROUP BY a.col1 ASC'
             . ' ORDER BY a.col2 DESC'
-            . ' LIMIT 28 OFFSET 3',
+            . ' LIMIT 28',
             $dsb->sql()
         );
     }

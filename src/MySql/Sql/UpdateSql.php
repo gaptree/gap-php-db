@@ -22,6 +22,9 @@ class UpdateSql extends ManipulateSql
 
         if ($this->limit) {
             $sql .= ' LIMIT ' . $this->limit;
+        }
+
+        if ($this->offset) {
             $sql .= ' OFFSET ' . $this->offset;
         }
 

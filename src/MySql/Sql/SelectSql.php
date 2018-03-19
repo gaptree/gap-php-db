@@ -37,7 +37,10 @@ class SelectSql extends ManipulateSql
         }
 
         $sql .= ' LIMIT ' . $this->limit;
-        $sql .= ' OFFSET ' . $this->offset;
+
+        if ($this->offset) {
+            $sql .= ' OFFSET ' . $this->offset;
+        }
 
         return $sql;
     }
