@@ -5,10 +5,13 @@ namespace Gap\Db\Pdo;
 
 class Cnn
 {
+    use CnnParamTrait;
+
     protected $pdo;
     protected $serverId;
     protected $trans;
     protected $paramArr = [];
+    protected $lastSql = '';
 
     public function __construct(\PDO $pdo, string $serverId)
     {
@@ -36,46 +39,19 @@ class Cnn
         return uniqid($this->serverId);
     }
 
-    public function str(string $val): Param\ParamStr
-    {
-        $param = new Param\ParamStr($val);
-        $this->paramArr[] = $param;
-        return $param;
-    }
-
-    public function int(int $val): Param\ParamInt
-    {
-        $param = new Param\ParamInt($val);
-        $this->paramArr[] = $param;
-        return $param;
-    }
-
-    public function bool(bool $val): Param\ParamBool
-    {
-        $param = new Param\ParamBool($val);
-        $this->paramArr[] = $param;
-        return $param;
-    }
-
-    public function dateTime(\DateTime $val): Param\ParamDateTime
-    {
-        $param = new Param\ParamDateTime($val);
-        $this->paramArr[] = $param;
-        return  $param;
-    }
-
-    public function expr(string $expr): Param\ParamExpr
-    {
-        return new Param\ParamExpr($expr);
-    }
-
     public function query(string $sql): Statement
     {
         $stmt = new Statement($this->pdo->prepare($sql));
         $stmt->bindParam(...$this->paramArr);
         $stmt->execute();
         $this->paramArr = [];
+        $this->lastSql = $sql;
         return $stmt;
+    }
+
+    public function lastSql(): string
+    {
+        return $this->lastSql;
     }
     /*
     public function prepare(string $sql): Statement
