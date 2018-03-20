@@ -86,6 +86,7 @@ class SelectSqlBuilderTest extends SqlBuilderTestBase
 
     public function testFetch(): void
     {
+        $this->initParamIndex();
         $pdo = $this->createMock('PDO');
         $stmt = $this->createMock('PDOStatement');
         $stmt->method('execute')->will($this->returnValue(true));
@@ -99,12 +100,28 @@ class SelectSqlBuilderTest extends SqlBuilderTestBase
         $fruit = $cnn->ssb()
             ->select('*')
             ->from('fruit')->end()
+            ->where()
+                ->expect('name')->equal()->str('apple')
+            ->end()
             ->fetch(FruitDto::class);
+
+        $executed = $cnn->executed();
+        $stmt = $executed[0];
+
         $this->assertEquals(
             new FruitDto([
                 'name' => 'apple', 'color'=> 'green',
             ]),
             $fruit
+        );
+
+        $this->assertEquals(
+            'SELECT * FROM fruit WHERE name = :k1 LIMIT 10',
+            $stmt->sql()
+        );
+        $this->assertEquals(
+            [':k1' => 'apple'],
+            $stmt->vals()
         );
     }
 

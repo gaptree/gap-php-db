@@ -6,10 +6,13 @@ use Gap\Db\Pdo\Param\ParamBase;
 class Statement
 {
     protected $stmt;
+    protected $sql;
+    protected $paramArr = [];
 
-    public function __construct(\PDOStatement $stmt)
+    public function __construct(\PDO $pdo, string $sql)
     {
-        $this->stmt = $stmt;
+        $this->stmt = $pdo->prepare($sql);
+        $this->sql = $sql;
     }
 
     public function execute(): void
@@ -53,8 +56,28 @@ class Statement
 
     public function bindParam(ParamBase ...$paramArr): void
     {
+        $this->paramArr = $paramArr;
         foreach ($paramArr as $param) {
             $this->stmt->bindValue($param->key(), $param->val(), $param->type());
         }
+    }
+
+    public function sql(): string
+    {
+        return $this->sql;
+    }
+
+    public function params(): array
+    {
+        return $this->paramArr;
+    }
+
+    public function vals(): array
+    {
+        $arr = [];
+        foreach ($this->paramArr as $param) {
+            $arr[$param->key()] = $param->val();
+        }
+        return $arr;
     }
 }

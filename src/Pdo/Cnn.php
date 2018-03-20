@@ -11,7 +11,8 @@ class Cnn
     protected $serverId;
     protected $trans;
     protected $paramArr = [];
-    protected $lastSql = '';
+
+    protected $executed = [];
 
     public function __construct(\PDO $pdo, string $serverId)
     {
@@ -41,17 +42,17 @@ class Cnn
 
     public function query(string $sql): Statement
     {
-        $stmt = new Statement($this->pdo->prepare($sql));
+        $stmt = new Statement($this->pdo, $sql);
         $stmt->bindParam(...$this->paramArr);
         $stmt->execute();
         $this->paramArr = [];
-        $this->lastSql = $sql;
+        $this->executed[] = $stmt;
         return $stmt;
     }
 
-    public function lastSql(): string
+    public function executed(): array
     {
-        return $this->lastSql;
+        return $this->executed;
     }
     /*
     public function prepare(string $sql): Statement
