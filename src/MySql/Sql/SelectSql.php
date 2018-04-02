@@ -45,6 +45,17 @@ class SelectSql extends ManipulateSql
         return $sql;
     }
 
+    public function countSql(): string
+    {
+        $sql = 'SELECT count(1) `count`'
+            . ' FROM ' . $this->tablePart;
+        if ($this->wherePart) {
+            $sql .= ' WHERE ' . $this->wherePart;
+        }
+        $sql .= ' LIMIT 1';
+        return $sql;
+    }
+
     public function fetchAssoc(): array
     {
         return $this->query()->fetchAssoc();
@@ -64,5 +75,15 @@ class SelectSql extends ManipulateSql
     public function list(string $class)
     {
         return new Collection($this, $class);
+    }
+
+    public function count(): int
+    {
+        $stmt = $this->cnn->query($this->countSql());
+        if ($arr = $stmt->fetchAssoc()) {
+            return (int) $arr['count'];
+        }
+
+        return 0;
     }
 }
