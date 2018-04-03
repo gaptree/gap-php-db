@@ -43,4 +43,9 @@ class SelectSqlBuilder extends ManipulateSqlBuilder
     {
         return $this->sql->listAssoc();
     }
+
+    public function count()
+    {
+        return $this->sql->count();
+    }
 }
