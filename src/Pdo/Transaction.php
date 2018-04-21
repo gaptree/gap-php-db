@@ -1,7 +1,9 @@
 <?php
 namespace Gap\Db\Pdo;
 
-class Transaction
+use Gap\Db\Contract\TransactionInterface;
+
+class Transaction implements TransactionInterface
 {
     protected $pdo;
     protected $transLevel = 0;

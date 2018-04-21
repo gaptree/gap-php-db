@@ -4,8 +4,9 @@ namespace Gap\Db\MySql\SqlBuilder;
 use Gap\Db\MySql\Sql\UpdateSql;
 use Gap\Db\MySql\Cnn;
 use Gap\Db\Collection;
+use Gap\Db\Contract\SqlBuilder\UpdateSqlBuilderInterface;
 
-class UpdateSqlBuilder extends ManipulateSqlBuilder
+class UpdateSqlBuilder extends ManipulateSqlBuilder implements UpdateSqlBuilderInterface
 {
     protected $setTool;
 

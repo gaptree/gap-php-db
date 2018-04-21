@@ -1,6 +1,9 @@
 <?php
 namespace Gap\Db;
 
+use Gap\Db\Contract\CnnInterface;
+use Gap\Db\Contract\DbManagerInterface;
+
 class DbManager implements DbManagerInterface
 {
     protected $optsArr = [];
@@ -17,7 +20,7 @@ class DbManager implements DbManagerInterface
         $this->serverId = $serverId;
     }
 
-    public function connect(string $name)
+    public function connect(string $name): CnnInterface
     {
         if (isset($this->cnnArr[$name])) {
             return $this->cnnArr[$name];

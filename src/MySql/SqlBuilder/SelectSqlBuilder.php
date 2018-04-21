@@ -4,8 +4,9 @@ namespace Gap\Db\MySql\SqlBuilder;
 use Gap\Db\MySql\Sql\SelectSql;
 use Gap\Db\MySql\Cnn;
 use Gap\Db\Collection;
+use Gap\Db\Contract\SqlBuilder\SelectSqlBuilderInterface;
 
-class SelectSqlBuilder extends ManipulateSqlBuilder
+class SelectSqlBuilder extends ManipulateSqlBuilder implements SelectSqlBuilderInterface
 {
     public function __construct(Cnn $cnn, SelectSql $selectSql)
     {

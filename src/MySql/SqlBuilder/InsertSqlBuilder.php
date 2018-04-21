@@ -4,8 +4,9 @@ namespace Gap\Db\MySql\SqlBuilder;
 use Gap\Db\MySql\Sql\InsertSql;
 use Gap\Db\MySql\Cnn;
 use Gap\Db\Collection;
+use Gap\Db\Contract\SqlBuilder\InsertSqlBuilderInterface;
 
-class InsertSqlBuilder extends ManipulateSqlBuilder
+class InsertSqlBuilder extends ManipulateSqlBuilder implements InsertSqlBuilderInterface
 {
     protected $valueTool;
 

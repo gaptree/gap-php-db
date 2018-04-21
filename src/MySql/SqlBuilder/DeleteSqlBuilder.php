@@ -4,8 +4,9 @@ namespace Gap\Db\MySql\SqlBuilder;
 use Gap\Db\MySql\Sql\DeleteSql;
 use Gap\Db\MySql\Cnn;
 use Gap\Db\Collection;
+use Gap\Db\Contract\SqlBuilder\DeleteSqlBuilderInterface;
 
-class DeleteSqlBuilder extends ManipulateSqlBuilder
+class DeleteSqlBuilder extends ManipulateSqlBuilder implements DeleteSqlBuilderInterface
 {
     public function __construct(Cnn $cnn, DeleteSql $deleteSql)
     {

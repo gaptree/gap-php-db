@@ -1,13 +1,17 @@
 <?php
 namespace Gap\Db\MySql;
 
-use Gap\Db\CnnInterface;
+use Gap\Db\Contract\CnnInterface;
+use Gap\Db\Contract\SqlBuilder\SelectSqlBuilderInterface;
+use Gap\Db\Contract\SqlBuilder\DeleteSqlBuilderInterface;
+use Gap\Db\Contract\SqlBuilder\UpdateSqlBuilderInterface;
+use Gap\Db\Contract\SqlBuilder\InsertSqlBuilderInterface;
 
 class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
 {
     use CnnSqlTrait;
 
-    public function ssb(): SqlBuilder\SelectSqlBuilder
+    public function ssb(): SelectSqlBuilderInterface
     {
         return new SqlBuilder\SelectSqlBuilder(
             $this,
@@ -15,7 +19,7 @@ class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
         );
     }
 
-    public function dsb(): SqlBuilder\DeleteSqlBuilder
+    public function dsb(): DeleteSqlBuilderInterface
     {
         return new SqlBuilder\DeleteSqlBuilder(
             $this,
@@ -23,7 +27,7 @@ class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
         );
     }
 
-    public function usb(): SqlBuilder\UpdateSqlBuilder
+    public function usb(): UpdateSqlBuilderInterface
     {
         return new SqlBuilder\UpdateSqlBuilder(
             $this,
@@ -31,7 +35,7 @@ class Cnn extends \Gap\Db\Pdo\Cnn implements CnnInterface
         );
     }
 
-    public function isb(): SqlBuilder\InsertSqlBuilder
+    public function isb(): InsertSqlBuilderInterface
     {
         return new SqlBuilder\InsertSqlBuilder(
             $this,

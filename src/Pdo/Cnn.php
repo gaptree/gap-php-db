@@ -2,6 +2,7 @@
 namespace Gap\Db\Pdo;
 
 //use Gap\Db\CnnInterface;
+use Gap\Db\Contract\TransactionInterface;
 
 class Cnn
 {
@@ -20,7 +21,7 @@ class Cnn
         $this->serverId = $serverId;
     }
 
-    public function trans(): Transaction
+    public function trans(): TransactionInterface
     {
         if ($this->trans) {
             return $this->trans;
