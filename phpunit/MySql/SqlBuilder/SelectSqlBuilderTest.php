@@ -116,7 +116,7 @@ class SelectSqlBuilderTest extends SqlBuilderTestBase
         );
 
         $this->assertEquals(
-            'SELECT * FROM fruit WHERE name = :k1 LIMIT 10',
+            'SELECT * FROM fruit WHERE name = :k1 LIMIT 1',
             $stmt->sql()
         );
         $this->assertEquals(

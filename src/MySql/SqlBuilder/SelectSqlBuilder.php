@@ -27,11 +27,13 @@ class SelectSqlBuilder extends ManipulateSqlBuilder implements SelectSqlBuilderI
 
     public function fetch(string $class)
     {
+        $this->sql->limit(1);
         return $this->sql->fetch($class);
     }
 
     public function fetchAssoc(): array
     {
+        $this->sql->limit(1);
         return $this->sql->fetchAssoc();
     }
 
