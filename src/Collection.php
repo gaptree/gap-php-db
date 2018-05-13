@@ -14,4 +14,13 @@ abstract class Collection implements \Iterator, \JsonSerializable
     {
         return $this->toArray();
     }
+
+    abstract public function current();
+    abstract public function key();
+    abstract public function next(): void;
+    abstract public function rewind(): void;
+    abstract public function valid(): bool;
+
+    abstract public function limit(int $limit);
+    abstract public function offset(int $offset);
 }

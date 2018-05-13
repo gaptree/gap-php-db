@@ -26,19 +26,19 @@ class Collection extends \Gap\Db\Collection
         return $this->index;
     }
 
-    public function next()
+    public function next(): void
     {
         $this->index++;
         $this->current = $this->stmt->fetch($this->class);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->stmt = $this->selectSql->query();
         $this->current = $this->stmt->fetch($this->class);
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->current ? true : false;
     }
