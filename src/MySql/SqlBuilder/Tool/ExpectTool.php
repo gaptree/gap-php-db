@@ -27,9 +27,19 @@ class ExpectTool extends ToolBase
         return $this->param($this->cnn->str($str));
     }
 
+    public function strArr(array $arr): CondTool
+    {
+        return $this->paramArr($this->cnn->strArr($arr));
+    }
+
     public function int(int $int): CondTool
     {
         return $this->param($this->cnn->int($int));
+    }
+
+    public function intArr(array $arr): CondTool
+    {
+        return $this->paramArr($this->cnn->intArr($arr));
     }
 
     public function bool(bool $bool): CondTool
@@ -50,6 +60,12 @@ class ExpectTool extends ToolBase
     protected function param(ParamBase $param): CondTool
     {
         $this->expectPart->cond($this->operate, $param);
+        return $this->condTool;
+    }
+
+    protected function paramArr(array $params): CondTool
+    {
+        $this->expectPart->condArr($this->operate, $params);
         return $this->condTool;
     }
 }

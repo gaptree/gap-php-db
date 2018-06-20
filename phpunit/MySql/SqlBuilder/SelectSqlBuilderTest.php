@@ -45,6 +45,28 @@ class SelectSqlBuilderTest extends SqlBuilderTestBase
         );
     }
 
+    public function testWithIn(): void
+    {
+        $this->initParamIndex();
+        $cnn = $this->getCnn();
+        $ssb = $cnn->ssb()
+            ->select('a.*', 'b.col1', 'b.col2')
+            ->from('tableA a', 'tableB b')->end()
+            ->where()
+                ->expect('a.col1')->withIn()->strArr(['a', 'b', 'c'])
+                ->andExpect('a.col2')->withIn()->intArr([1, 2, 3, 4])
+            ->end();
+
+        $this->assertEquals(
+            'SELECT a.*, b.col1, b.col2'
+            . ' FROM tableA a, tableB b'
+            . ' WHERE a.col1 IN (:k1, :k2, :k3)'
+            . ' AND a.col2 IN (:k4, :k5, :k6, :k7)'
+            . ' LIMIT 10',
+            $ssb->sql()
+        );
+    }
+
     public function testJoin(): void
     {
         $this->initParamIndex();

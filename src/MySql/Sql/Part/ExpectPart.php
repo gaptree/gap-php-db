@@ -62,6 +62,17 @@ class ExpectPart extends PartBase
         $this->res = $param->key();
         return $this->cond;
     }
+
+    public function condArr(string $operate, array $params): CondPart
+    {
+        $this->operate = $operate;
+        $keys = [];
+        foreach ($params as $param) {
+            $keys[] = $param->key();
+        }
+        $this->res = '(' . implode(', ', $keys) . ')';
+        return $this->cond;
+    }
     /*
     public function expr(string $operate, string $expr): void
     {

@@ -38,4 +38,10 @@ trait OperateTrait
         $this->operate = 'LIKE';
         return $this;
     }
+
+    public function withIn(): self
+    {
+        $this->operate = 'IN';
+        return $this;
+    }
 }
