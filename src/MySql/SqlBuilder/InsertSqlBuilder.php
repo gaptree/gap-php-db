@@ -8,13 +8,15 @@ use Gap\Db\Contract\SqlBuilder\InsertSqlBuilderInterface;
 
 class InsertSqlBuilder extends ManipulateSqlBuilder implements InsertSqlBuilderInterface
 {
-    protected $valueTool;
+    private $valueTool;
+    private $onDupTool;
 
     public function __construct(Cnn $cnn, InsertSql $insertSql)
     {
         $this->cnn =$cnn;
         $this->sql = $insertSql;
         $this->valueTool = new Tool\ValueTool($this, $this->cnn);
+        $this->onDupTool = new Tool\OnDupTool($this, $this->cnn, $insertSql);
     }
 
     public function insert(string $into): self
@@ -35,5 +37,11 @@ class InsertSqlBuilder extends ManipulateSqlBuilder implements InsertSqlBuilderI
         $this->sql->value($valuePart);
         $this->valueTool->setValuePart($valuePart);
         return $this->valueTool;
+    }
+
+    public function onDuplicate(string $field): Tool\OnDupTool
+    {
+        $this->onDupTool->setField($field);
+        return $this->onDupTool;
     }
 }

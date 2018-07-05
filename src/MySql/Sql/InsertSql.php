@@ -1,11 +1,14 @@
 <?php
 namespace Gap\Db\MySql\Sql;
 
+use Gap\Db\Pdo\Param\ParamBase;
+
 class InsertSql extends SqlBase
 {
-    protected $fieldArr = [];
-    protected $valuePartArr = [];
-    protected $into;
+    private $fieldArr = [];
+    private $valuePartArr = [];
+    private $onDupPartArr = [];
+    private $into;
 
     public function field(string ...$fieldArr): self
     {
@@ -19,6 +22,13 @@ class InsertSql extends SqlBase
         return $this;
     }
 
+    public function onDuplicate(string $field, ParamBase $param): self
+    {
+        $setPart = new Part\SetPart($field, $param);
+        $this->onDupPartArr[] = $setPart;
+        return $this;
+    }
+
     public function into(string $into): self
     {
         $this->into = $into;
@@ -27,9 +37,15 @@ class InsertSql extends SqlBase
 
     public function sql(): string
     {
-        return 'INSERT INTO ' . $this->into
+        $sql = 'INSERT INTO ' . $this->into
             . ' (' . implode(', ', $this->fieldArr) . ')'
             . ' VALUES '
             . implode(', ', $this->valuePartArr);
+
+        if ($this->onDupPartArr) {
+            $sql .= ' ON DUPLICATE KEY UPDATE '
+                . implode(', ', $this->onDupPartArr);
+        }
+        return $sql;
     }
 }
