@@ -9,6 +9,12 @@ trait OperateTrait
         return $this;
     }
 
+    public function notEqual(): self
+    {
+        $this->operate = '<>';
+        return $this;
+    }
+
     public function less(): self
     {
         $this->operate = '<';

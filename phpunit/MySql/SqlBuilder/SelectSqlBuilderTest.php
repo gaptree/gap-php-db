@@ -25,6 +25,26 @@ class SelectSqlBuilderTest extends SqlBuilderTestBase
         );
     }
 
+    public function testNotEqual(): void
+    {
+        $this->initParamIndex();
+        $cnn = $this->getCnn();
+        $ssb = $cnn->ssb()
+            ->select('a.*', 'b.col1', 'b.col2')
+            ->from('tableA a', 'tableB b')->end()
+            ->where()
+                ->expect('a.col1')->notEqual()->str('v1')
+            ->end();
+
+        $this->assertEquals(
+            'SELECT a.*, b.col1, b.col2'
+            . ' FROM tableA a, tableB b'
+            . ' WHERE a.col1 <> :k1'
+            . ' LIMIT 10',
+            $ssb->sql()
+        );
+    }
+
     public function testLike(): void
     {
         $this->initParamIndex();
