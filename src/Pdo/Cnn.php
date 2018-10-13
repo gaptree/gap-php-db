@@ -36,6 +36,20 @@ class Cnn
         return $this->pdo->lastInsertId($name);
     }
 
+    public function uniqBin(int $len = 10): string
+    {
+        // https://jason.pureconcepts.net/2013/09/php-convert-uniqid-to-timestamp/
+        // https://mariadb.com/kb/en/library/guiduuid-performance/
+        if ($len < 8) {
+            throw new \Exception("Length of uniqBin cannot less than 8");
+        }
+
+        $preLen = 6;
+        $micros = intval(microtime(true) * (10 ** 8));
+        $pre = substr(dechex($micros), 0, $preLen * 2);
+        return hex2bin($pre) . random_bytes($len - $preLen);
+    }
+
     // deprecated
     public function zid(): string
     {
