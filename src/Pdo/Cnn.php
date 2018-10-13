@@ -31,11 +31,18 @@ class Cnn
         return $this->trans;
     }
 
+    public function lastInsertId(string $name = null)
+    {
+        return $this->pdo->lastInsertId($name);
+    }
+
+    // deprecated
     public function zid(): string
     {
         return uniqid($this->serverId . '-');
     }
 
+    // deprecated
     public function zcode(): string
     {
         return uniqid($this->serverId);
